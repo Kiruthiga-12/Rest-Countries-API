@@ -340,7 +340,7 @@ info.appendChild(borders);
 
 let img = document.createElement('img');
 img.src = item.flags.png;
-img.style.cssText ='flex:2;width:50%;height:60vh';
+img.className = 'details_img'
 
 let gap = document.createElement('div');
 gap.style.cssText='flex:1';

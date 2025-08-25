@@ -131,10 +131,9 @@ overflow:hidden;
 }
 
 
-/*new*/
 .back_btn_darkmode{
 cursor:pointer;
-font-size:16ox;
+font-size:16px;
 font-family:inherit;
 border:none;
 border-radius:5px;
@@ -203,4 +202,11 @@ padding:5px 20px;
 background-color:inherit;
 box-shadow:1px 1px 5px hsl(207, 26%, 17%);
 color:inherit
+}
+
+.details_img{
+    flex:2;
+    width:50%;
+    height:60vh
+
 }

@@ -135,3 +135,84 @@ overflow:hidden;
 .disp{
     display: none;
 }
+
+.back_btn_darkmode{
+cursor:pointer;
+font-size:14px;
+font-family:inherit;
+border:none;
+border-radius:5px;
+padding:10px 30px;
+background-color:inherit;
+box-shadow:1px 1px 3px hsl(200, 15%, 8%);
+color:inherit
+}
+.back_btn_lightmode{
+    cursor:pointer;
+    font-size:14px;
+    font-family:inherit;
+    border:none;
+    border-radius:5px;
+    padding:10px 30px;
+    background-color:inherit;
+    box-shadow:1px 1px 5px hsl(207, 26%, 17%);
+    color:inherit
+}
+
+.ex_div{
+    width:90%;
+    margin: 30px auto;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction: column;
+    padding:1px;
+}
+
+.box1_box2{
+    display:flex;
+    align-items:stretch;
+    justify-content:space-between;
+}
+
+.text{
+font-size:14px;font-weight:800;
+}
+.text_value{
+font-weight:normal;
+font-size:12px
+}
+
+.borders_darkmode{
+margin-top:15px;
+margin-left:15px;
+cursor:pointer;
+font-size:inherit;
+font-family:inherit;
+border:none;border-radius:5px;
+padding:5px 20px;
+background-color:inherit;
+box-shadow:1px 1px 5px hsl(200, 15%, 8%);
+color:inherit
+}
+
+.borders_lightmode{
+margin-top:15px;
+margin-left:15px;
+cursor:pointer;
+font-size:inherit;
+font-family:inherit;
+border:none;
+border-radius:5px;
+padding:5px 20px;
+background-color:inherit;
+box-shadow:1px 1px 5px hsl(207, 26%, 17%);
+color:inherit
+}
+
+.details_img{
+    flex:2;
+    width:80%;
+    height:55vh
+
+}
