@@ -99,6 +99,7 @@ position: absolute;
 }
 .box:hover{
     box-shadow: 2px 2px 5px hsl(0, 0%, 50%);
+          cursor: url('gps.png'),pointer;
 }
 .img{
     width:100%;
@@ -129,4 +130,8 @@ overflow:hidden;
 }
 #glass{
     margin-top:-15%;
+}
+
+.disp{
+    display: none;
 }

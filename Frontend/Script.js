@@ -12,6 +12,15 @@ let details = document.getElementsByClassName('details');
 let glass = document.getElementById('glass');
 let moon = document.getElementById('moon');
 let flag = false;
+let toolbar = document.getElementById('toolbar');
+let details_page = document.getElementsByClassName('details_page')[0];
+let map_info = document.getElementById('map');
+let marker ;
+
+const map = L.map(map_info).setView([20,77],5);//India as Zoom level
+     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(map);
 
 fetchAll();
 
@@ -54,17 +63,20 @@ function displayArr(){
           reg.className = 'reg';
           reg.innerHTML = `<span class='bold'  >Regions: </span>`+arr[i].region;
 
-          let cap = document.createElement('p');
-          cap.className = 'capital';
-          cap.innerHTML = `<span class='bold' >Capital: </span>`+arr[i].capital;
+          
 
           details.appendChild(name);
           details.appendChild(pop);
           details.appendChild(reg);
-          details.appendChild(cap)
+          if(arr[i].capital)
+         { let cap = document.createElement('p');
+          cap.className = 'capital';
+          cap.innerHTML = `<span class='bold' >Capital: </span>`+arr[i].capital;
+          details.appendChild(cap)}
           box.appendChild(img);
           box.appendChild(details)
           country_item.append(box);
+          displayDetailsPage(box,arr[i]);
         }
         region.sort();
         region = Array.from(new Set(region))
@@ -94,16 +106,22 @@ search.addEventListener("input",(e)=>{
 country_item.innerHTML = '';
 arr= [];
 if(e.target.value.length >0 && select.value =='Filter by Region'){
-    fetch(`http://localhost:8080/countries?name_like=${e.target.value}`)
+    fetch(`http://localhost:8080/countries?name=${e.target.value}`)
     .then((res)=> res.json())
     .then((data)=>{
         if(data.length>0){
            arr = data;
            arr.sort();
             displayArr();
+            let x,y;
+            [x,y]= data[0].latlng;
+           marker = L.marker([x,y])
+                    .addTo(map)
+                    .bindPopup(data[0].nme)
+                    .openPopup();
         }
        else{
-        country_item.innerHTML  = 'No Data found'
+        country_item.innerHTML  = 'No Data found';
        }
     })
 }
@@ -123,6 +141,9 @@ else if(e.target.value.length >0 && select.value !='Filter by Region'){
 }
 else{
     fetchAll();
+    marker.remove();
+    map.setView([20,77],5);
+
 }
 })
 
@@ -194,3 +215,150 @@ glass.style.color ='hsl(0, 0%, 50%)';
 moon.style.color ='hsl(0, 0%, 50%)';
 }
 })
+
+
+//Details Page
+function displayDetailsPage(li,item){
+
+li.addEventListener("click",()=>{
+   let x, y;
+[x,y]= item.latlng;
+
+ marker = L.marker([x,y]) 
+    .addTo(map)
+    .bindPopup(item.name)
+    .openPopup();
+
+    toolbar.classList.add('disp') ;
+    country_item.classList.add('disp');
+    details_page.classList.remove('disp');
+
+    let back_btn = document.createElement('input');
+    if(flag)//dark mode
+    {
+back_btn.className ='back_btn_darkmode'        
+    }
+    else{
+back_btn.className = 'back_btn_lightmode'
+    }
+    back_btn.type ='submit';
+    back_btn.value = '\u2190 Back';
+    back_btn.id='back_btn';
+    details_page.append(back_btn);
+
+let div = document.createElement('div');
+div.className ='ex_div';
+
+let info = document.createElement('div');
+info.style.cssText ='flex:8;';
+
+let h1 = document.createElement('h1');
+h1.innerHTML = item.name;
+info.appendChild(h1);
+
+let box1_box2 = document.createElement('div');
+box1_box2.className='box1_box2'
+
+
+let box1 = document.createElement('div');
+box1.style.cssText ='flex:6';
+
+let native_name = document.createElement('p');
+native_name.classList.add('bold','text');
+native_name.innerHTML ='Native Name: <span class="text_value">' + item.nativeName +'</span>';
+
+let population = document.createElement('p');
+population.classList.add('bold','text');
+population.innerHTML ='Population: <span class="text_value">' + item.population.toLocaleString() +'</span>';
+
+let region = document.createElement('p');
+region.classList.add('bold','text');
+region.innerHTML ='Region: <span class="text_value">' + item.region +'</span>';
+
+let subregion= document.createElement('p');
+subregion.classList.add('bold','text');
+subregion.innerHTML ='Sub Region: <span class="text_value">' + item.subregion+ '</span>';
+
+
+
+box1.appendChild(native_name);
+box1.appendChild(population);
+box1.appendChild(region);
+box1.appendChild(subregion);
+if(item.capital)
+{let capital = document.createElement('p');
+capital.classList.add('bold','text');
+capital.innerHTML ='Capital: <span class="text_value">' + item.capital +'</span>';
+box1.appendChild(capital);}
+
+
+let box2 = document.createElement('div');
+box2.style.cssText ='flex:6';
+
+let domain = document.createElement('p');
+domain.classList.add('bold','text');
+domain.innerHTML ='Top Level Domain: <span class="text_value">' + item.topLevelDomain +'</span>';
+
+let currencies= document.createElement('p');
+currencies.classList.add('bold','text');
+currencies.innerHTML ='Currencies: <span class="text_value">' + item.currencies.map((li)=>li.name).join();
+
+let languages = document.createElement('p');
+languages.classList.add('bold','text');
+languages.innerHTML ='Languages: <span class="text_value">' + item.languages.map((li)=>li.name).join();
+
+box2.appendChild(domain);
+box2.appendChild(currencies);
+box2.appendChild(languages);
+
+box1_box2.appendChild(box1)
+box1_box2.appendChild(box2)
+
+info.appendChild(box1_box2);
+
+if(item?.borders){
+let span = document.createElement('span');
+span.innerHTML = 'Border Countries: ';
+span.className ='text'
+
+info.appendChild(span)
+for(let i=0;i<item.borders?.length;i++){
+let borders = document.createElement('input');
+borders.type='submit';
+borders.value = item.borders[i];
+    if(flag)//dark mode
+    {
+borders.className ='borders_darkmode'      
+    }
+    else{
+borders.className ='borders_lightmode';
+    }
+info.appendChild(borders);
+}
+}
+
+
+let img = document.createElement('img');
+img.src = item.flags.png;
+img.style.cssText ='flex:2;width:50%;height:60vh';
+
+let gap = document.createElement('div');
+gap.style.cssText='flex:1';
+
+div.appendChild(img);
+div.appendChild(gap)
+div.append(info);
+
+details_page.append(div);
+
+back_btn.addEventListener("click",()=>{
+    details_page.innerHTML = '';
+    country_item.classList.remove('disp');
+toolbar.classList.remove('disp');
+details_page.classList.add('disp');
+marker.remove();
+map.setView([20,77],5);
+})
+})
+
+}

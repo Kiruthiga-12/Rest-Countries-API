@@ -96,6 +96,7 @@ position: absolute;
 }
 .box:hover{
     box-shadow: 2px 2px 5px hsl(0, 0%, 50%);
+        cursor: url('gps.png'),pointer;
 }
 .img{
     width:100%;
@@ -123,4 +124,83 @@ overflow:hidden;
 }
 .bold{
     font-weight: bold;
+}
+
+.disp{
+    display: none;
+}
+
+
+/*new*/
+.back_btn_darkmode{
+cursor:pointer;
+font-size:16ox;
+font-family:inherit;
+border:none;
+border-radius:5px;
+padding:15px 50px;
+background-color:inherit;
+box-shadow:1px 1px 3px hsl(200, 15%, 8%);
+color:inherit
+}
+.back_btn_lightmode{
+    cursor:pointer;
+    font-size:16px;
+    font-family:inherit;
+    border:none;
+    border-radius:5px;
+    padding:15px 50px;
+    background-color:inherit;
+    box-shadow:1px 1px 5px hsl(207, 26%, 17%);
+    color:inherit
+}
+
+.ex_div{
+    width:100%;
+    margin: 30px auto;
+    display:flex;
+    align-items:center;
+    justify-content:space-evenly;
+    padding:1px
+}
+
+.box1_box2{
+    display:flex;
+    align-items:stretch;
+    justify-content:space-between
+}
+
+.text{
+font-size:17px;font-weight:800
+}
+.text_value{
+font-weight:normal;
+font-size:16px
+}
+
+.borders_darkmode{
+margin-top:15px;
+margin-left:15px;
+cursor:pointer;
+font-size:inherit;
+font-family:inherit;
+border:none;border-radius:5px;
+padding:5px 20px;
+background-color:inherit;
+box-shadow:1px 1px 5px hsl(200, 15%, 8%);
+color:inherit
+}
+
+.borders_lightmode{
+margin-top:15px;
+margin-left:15px;
+cursor:pointer;
+font-size:inherit;
+font-family:inherit;
+border:none;
+border-radius:5px;
+padding:5px 20px;
+background-color:inherit;
+box-shadow:1px 1px 5px hsl(207, 26%, 17%);
+color:inherit
 }
