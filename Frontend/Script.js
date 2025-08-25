@@ -16,6 +16,8 @@ let toolbar = document.getElementById('toolbar');
 let details_page = document.getElementsByClassName('details_page')[0];
 let map_info = document.getElementById('map');
 let marker ;
+let borders_grp = document.getElementsByClassName('borders') ; //borders_element;
+let back_btn = document.getElementsByClassName('back_btn');
 
 const map = L.map(map_info).setView([20,77],5);//India as Zoom level
      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -198,10 +200,23 @@ select.style.cssText= 'background-color:hsl(209, 23%, 22%);color:hsl(0, 100%, 10
 Array.from(box).forEach((li)=>{
     li.style.boxShadow = '1px 1px 3px hsl(200, 15%, 8%)';
     li.children[1].style.backgroundColor='hsl(209, 23%, 22%);';
-}
-);
+});
 glass.style.color ='hsl(0, 100%, 100%)';
 moon.style.color ='hsl(0, 100%, 100%)';
+if(borders_grp){
+Array.from(borders_grp).forEach((li)=>{
+    li.classList.add('borders_darkmode');
+    li.classList.remove('borders_lightmode');
+})
+}
+
+if(back_btn )
+{   
+Array.from(back_btn).forEach((li)=>{
+li.classList.add('back_btn_darkmode');
+     li.classList.remove('back_btn_lightmode');
+});  
+}
 }
 else if(flag == false){//light mode
 document.body.style.cssText ='color:hsl(200, 15%, 8%);background-color:hsl(0, 0%, 99%)';
@@ -213,6 +228,20 @@ Array.from(box).forEach((li)=>{li.style.boxShadow = '1px 1px 3px hsl(0, 0%, 50%)
 });
 glass.style.color ='hsl(0, 0%, 50%)';
 moon.style.color ='hsl(0, 0%, 50%)';
+if(borders_grp){
+Array.from(borders_grp).forEach((li)=>{
+    li.classList.add('borders_lightmode');
+    li.classList.remove('borders_darkmode');
+})
+}
+if(back_btn)
+{   
+    Array.from(back_btn).forEach((li)=>{
+   li.classList.add('back_btn_lightmode');
+     li.classList.remove('back_btn_darkmode');
+    })
+  
+}
 }
 })
 
@@ -234,16 +263,18 @@ li.addEventListener("click",()=>{
     details_page.classList.remove('disp');
 
     let back_btn = document.createElement('input');
+    back_btn.className ='back_btn';
     if(flag)//dark mode
     {
-back_btn.className ='back_btn_darkmode'        
+back_btn.classList.add('back_btn_darkmode')    ;   
+back_btn.classList.remove('back_btn_lightmode')    ;   
     }
     else{
-back_btn.className = 'back_btn_lightmode'
+back_btn.classList.add('back_btn_lightmode')    ;   
+back_btn.classList.remove('back_btn_darkmode')    ;  
     }
     back_btn.type ='submit';
     back_btn.value = '\u2190 Back';
-    back_btn.id='back_btn';
     details_page.append(back_btn);
 
 let div = document.createElement('div');
@@ -319,24 +350,26 @@ info.appendChild(box1_box2);
 if(item?.borders){
 let span = document.createElement('span');
 span.innerHTML = 'Border Countries: ';
-span.className ='text'
-
+span.className ='text';
 info.appendChild(span)
 for(let i=0;i<item.borders?.length;i++){
 let borders = document.createElement('input');
+borders.className ='borders'
 borders.type='submit';
 borders.value = item.borders[i];
+
     if(flag)//dark mode
     {
-borders.className ='borders_darkmode'      
+borders.classList.add('borders_darkmode') ;
+   borders.classList.remove('borders_lightmode') ;
     }
     else{
-borders.className ='borders_lightmode';
+borders.classList.add('borders_lightmode') ;
+   borders.classList.remove('borders_darkmode') ;
     }
 info.appendChild(borders);
 }
 }
-
 
 let img = document.createElement('img');
 img.src = item.flags.png;
@@ -350,6 +383,9 @@ div.appendChild(gap)
 div.append(info);
 
 details_page.append(div);
+
+
+
 
 back_btn.addEventListener("click",()=>{
     details_page.innerHTML = '';
