@@ -4,7 +4,6 @@ let region = [];
 let select = document.getElementsByClassName('select')[0];
 let country_item = document.getElementsByClassName('country_item')[0];
 let search = document.getElementsByClassName('search')[0];
-let default_select = document.getElementById('default_select');
 let switch_mode= document.getElementById('switch');
 let nav = document.getElementsByTagName('nav')[0];
 let box = document.getElementsByClassName('box');
@@ -27,7 +26,6 @@ const map = L.map(map_info).setView([20,77],5);//India as Zoom level
 fetchAll();
 
 function fetchAll(){
-
     fetch('http://localhost:8080/countries')
     .then((res)=> res.json())
     .then((data)=>{
@@ -36,6 +34,7 @@ function fetchAll(){
            arr.sort();
         }
         displayArr();
+        displayOption(region,'Filter by Region');
     })
 }
 
@@ -81,22 +80,26 @@ function displayArr(){
           displayDetailsPage(box,arr[i]);
         }
         region.sort();
-        region = Array.from(new Set(region))
-        displayOption(region)
+        region = Array.from(new Set(region))  ;   
+
     }
 }
 
-function displayOption(region){
+function displayOption(region,val){
     opt = document.createElement('option');
     opt.innerHTML = 'Filter by Region';
-    opt.id='default_select'
     opt.value = 'Filter by Region';
-    opt.setAttribute('selected',true);
+    if(val == "Filter by Region")
+    select.value = val;
     opt.style.borderRadius = '5px';
     select.append(opt);
 
     for(let i =0;i<region.length;i++)
 {opt = document.createElement('option');
+    if (region[i] == val);
+   {
+   select.value = val;
+    }
 opt.innerHTML = region[i];
 opt.value = region[i];
 opt.className = 'opt';
@@ -119,25 +122,35 @@ if(e.target.value.length >0 && select.value =='Filter by Region'){
             [x,y]= data[0].latlng;
            marker = L.marker([x,y])
                     .addTo(map)
-                    .bindPopup(data[0].nme)
+                    .bindPopup(data[0].name)
                     .openPopup();
         }
        else{
         country_item.innerHTML  = 'No Data found';
+         marker.remove();
+    map.setView([20,77],5);
        }
     })
 }
 else if(e.target.value.length >0 && select.value !='Filter by Region'){
-    fetch(`http://localhost:8080/countries?name_like=${e.target.value}&region=${select.value}`)
+    fetch(`http://localhost:8080/countries?name=${e.target.value}&region=${select.value}`)
     .then((res)=> res.json())
     .then((data)=>{
         if(data.length>0){
            arr = data;
            arr.sort();
             displayArr();
+             let x,y;
+            [x,y]= data[0].latlng;
+           marker = L.marker([x,y])
+                    .addTo(map)
+                    .bindPopup(data[0].name)
+                    .openPopup();
         }
        else{
-        country_item.innerHTML  = 'No Data found'
+        country_item.innerHTML  = 'No Data found';
+         marker.remove();
+    map.setView([20,77],5);
        }
     })
 }
@@ -145,7 +158,7 @@ else{
     fetchAll();
     marker.remove();
     map.setView([20,77],5);
-
+select.innerHTML = '';
 }
 })
 
@@ -153,38 +166,67 @@ else{
 select.addEventListener("change",(e)=>{
     country_item.innerHTML = '';
     arr = [];
+    let sel_val = e.target.value;
+    select.value = e.target.value;
 if(e.target.value.length >0 && e.target.value != ' ' & e.target.value !='Filter by Region' && search.value.length == 0 ){
-    fetch(`http://localhost:8080/countries?region_like=${e.target.value}`)
+    fetch(`http://localhost:8080/countries?region=${e.target.value}`)
     .then((res)=> res.json())
     .then((data)=>{
         if(data.length>0){
            arr = data;
            arr.sort();
+            select.value = sel_val
            select.innerHTML = '';
            displayArr();
+                   displayOption(region,sel_val);
         }
        else{
         country_item.innerHTML  = 'No Data found';
+         marker.remove();
+    map.setView([20,77],5);
        }
     })
 }
-else if(e.target.value.length >0 && e.target.value != ' ' & e.target.value !='Filter by Region' && search.value.length > 0 ){
-    fetch(`http://localhost:8080/countries?region_like=${e.target.value}&name_like=${search.value}`)
+else if(e.target.value.length >0 && e.target.value != ' ' && e.target.value != 'Filter by Region' && search.value.length > 0 ){
+    fetch(`http://localhost:8080/countries?region=${e.target.value}&name=${search.value}`)
     .then((res)=> res.json())
     .then((data)=>{
         if(data.length>0){
            arr = data;
            arr.sort();
+           select.value = sel_val
            select.innerHTML = '';
+           displayArr();
+           displayOption(region,sel_val);
+        }
+       else{
+        country_item.innerHTML  = 'No Data found';
+         marker.remove();
+    map.setView([20,77],5);
+       }
+    })
+}
+else if(e.target.value.length >0 && e.target.value != ' ' && e.target.value == 'Filter by Region' && search.value.length > 0 ){
+    fetch(`http://localhost:8080/countries?name=${search.value}`)
+    .then((res)=> res.json())
+    .then((data)=>{
+        if(data.length>0){
+           arr = data;
+           arr.sort();
            displayArr();
         }
        else{
         country_item.innerHTML  = 'No Data found';
+         marker.remove();
+    map.setView([20,77],5);
        }
     })
 }
 else{
+    select.innerHTML = '';
     fetchAll();
+      marker.remove();
+    map.setView([20,77],5);
 }
 })
 
