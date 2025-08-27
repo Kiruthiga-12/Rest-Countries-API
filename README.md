@@ -23,7 +23,7 @@ Functionality:
 Live Demo:
 
 Frontend:
-
+https://kiruthiga-12.github.io/Rest-Countries-API/
 
 Backend:
-
+https://rest-countries-api-wdnj.onrender.com/countries
