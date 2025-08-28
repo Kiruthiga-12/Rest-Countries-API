@@ -26,7 +26,7 @@ const map = L.map(map_info).setView([20,77],5);//India as Zoom level
 fetchAll();
 
 function fetchAll(){
-    fetch('http://localhost:8080/countries')
+    fetch('https://rest-countries-api-wdnj.onrender.com/countries')
     .then((res)=> res.json())
     .then((data)=>{
         if(data.length>0){
@@ -111,7 +111,7 @@ search.addEventListener("input",(e)=>{
 country_item.innerHTML = '';
 arr= [];
 if(e.target.value.length >0 && select.value =='Filter by Region'){
-    fetch(`http://localhost:8080/countries?name=${e.target.value}`)
+    fetch(`https://rest-countries-api-wdnj.onrender.com/countries?name=${e.target.value}`)
     .then((res)=> res.json())
     .then((data)=>{
         if(data.length>0){
@@ -133,7 +133,7 @@ if(e.target.value.length >0 && select.value =='Filter by Region'){
     })
 }
 else if(e.target.value.length >0 && select.value !='Filter by Region'){
-    fetch(`http://localhost:8080/countries?name=${e.target.value}&region=${select.value}`)
+    fetch(`https://rest-countries-api-wdnj.onrender.com/countries?name=${e.target.value}&region=${select.value}`)
     .then((res)=> res.json())
     .then((data)=>{
         if(data.length>0){
@@ -169,7 +169,7 @@ select.addEventListener("change",(e)=>{
     let sel_val = e.target.value;
     select.value = e.target.value;
 if(e.target.value.length >0 && e.target.value != ' ' & e.target.value !='Filter by Region' && search.value.length == 0 ){
-    fetch(`http://localhost:8080/countries?region=${e.target.value}`)
+    fetch(`https://rest-countries-api-wdnj.onrender.com/countries?region=${e.target.value}`)
     .then((res)=> res.json())
     .then((data)=>{
         if(data.length>0){
@@ -188,7 +188,7 @@ if(e.target.value.length >0 && e.target.value != ' ' & e.target.value !='Filter 
     })
 }
 else if(e.target.value.length >0 && e.target.value != ' ' && e.target.value != 'Filter by Region' && search.value.length > 0 ){
-    fetch(`http://localhost:8080/countries?region=${e.target.value}&name=${search.value}`)
+    fetch(`https://rest-countries-api-wdnj.onrender.com/countries?region=${e.target.value}&name=${search.value}`)
     .then((res)=> res.json())
     .then((data)=>{
         if(data.length>0){
@@ -207,7 +207,7 @@ else if(e.target.value.length >0 && e.target.value != ' ' && e.target.value != '
     })
 }
 else if(e.target.value.length >0 && e.target.value != ' ' && e.target.value == 'Filter by Region' && search.value.length > 0 ){
-    fetch(`http://localhost:8080/countries?name=${search.value}`)
+    fetch(`https://rest-countries-api-wdnj.onrender.com/countries?name=${search.value}`)
     .then((res)=> res.json())
     .then((data)=>{
         if(data.length>0){
